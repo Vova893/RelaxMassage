@@ -14,7 +14,7 @@ def booking_notification(booking):
             f"📅 {booking.book_date} {booking.time_slot}\n"
             f"💆 {booking.service}\n"
             f"👤 {booking.user_name}\n"
-            f"📱 <code>{booking.phone or "Не указан"}</code>")
+            f"📱 <code>{booking.phone or 'Не указан'}</code>")
 
     try:
         for admin_id in ADMIN_ID:
