@@ -2,9 +2,9 @@
 🛠 inline_admin.py - ПОЛНОЦЕННЫЙ АДМИНСКИЙ КАЛЕНДАРЬ
 
 ✅ Показывает:
-   🟢 Рабочий день (много свободно)
+    Рабочий день (много свободно)
    🟡 Частично занят
-   🔴 Выходной/полностью занят
+   ❗️ Выходной/полностью занят
    📅 Сегодня (выделено)
 
 ✅ Навигация: ◀️ Пред.мес. | След.мес. ▶️
@@ -125,17 +125,17 @@ def get_admin_day_status(day_date: date) -> Tuple[str, str]:
     🎨 Статус дня для админского календаря
 
     Логика цветовой индикации:
-    ✅ 🔴 ПРОШЕДШИЕ ДНИ  (< today)
+    ✅ ❗️ ПРОШЕДШИЕ ДНИ  (< today)
     ✅ 📅 СЕГОДНЯ       (== today)
-    ✅ 🟢 МНОГО СВОБОДНЫХ (>5 слотов)
+    ✅   МНОГО СВОБОДНЫХ (>5 слотов)
     ✅ 🟡 МАЛО СВОБОДНЫХ (1-5 слотов)
-    ✅ 🔴 ПОЛНОСТЬЮ ЗАНЯТЫ (0 слотов)
+    ✅ ❗️ ПОЛНОСТЬЮ ЗАНЯТЫ (0 слотов)
     """
     today = date.today()
 
-    # 🎯 1. ПРОШЕДШИЕ ДНИ = КРАСНЫЙ 🔴
+    # 🎯 1. ПРОШЕДШИЕ ДНИ = КРАСНЫЙ ❗️
     if day_date < today:
-        return "🔴", "Прошедший день"
+        return "❗️", "Прошедший день"
 
     # 🎯 2. СЕГОДНЯ = 📅
     if day_date == today:
@@ -146,11 +146,11 @@ def get_admin_day_status(day_date: date) -> Tuple[str, str]:
     free_count = len(slots)
 
     if free_count >= 6:  # >50% свободно (6 из 11)
-        return "🟢", f"Свободно: {free_count}"
+        return "", f"Свободно: {free_count}"
     elif free_count >= 1:  # 1-5 слотов
-        return "🟡", f"Свободно: {free_count}"
+        return "", f"Свободно: {free_count}" #🟡
     else:  # 0 слотов
-        return "🔴", "Занято/выходной"
+        return "❗️", "Занято/выходной"
 
 
 def get_admin_date_menu(date_str: str) -> InlineKeyboardMarkup:
@@ -217,12 +217,12 @@ def get_time_management_menu(date_str: str) -> InlineKeyboardMarkup:
 def get_slot_status_emoji(slot_time: str, book_date: date,
                           available_slots: List[str], booked_slots: List[str]) -> str:
     """🎨 Эмодзи статуса слота для админа"""
-    # 🔴 Забронировано
+    # ❗️ Забронировано
     if slot_time in booked_slots:
-        return "🔴"
-    # 🟢 Доступно
+        return "❗️"
+    #  Доступно
     if slot_time in available_slots:
-        return "🟢"
+        return "" #🟢
     # ⭕ Отключено
     return "⭕"
 
