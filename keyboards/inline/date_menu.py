@@ -1,10 +1,10 @@
 """
-📅 date_menu.py - ПОЛЬЗОВАТЕЛЬСКИЙ календарь (🔴 прошедшие дни!)
+📅 date_menu.py - ПОЛЬЗОВАТЕЛЬСКИЙ календарь (❗️ прошедшие дни!)
 
 ✅ Показывает:
-   🔴 Прошедшие дни (недоступны)
+   ❗️ Прошедшие дни (недоступны)
    📅 Сегодня (доступно)
-   🟢 Будущие дни (по слотам)
+    Будущие дни (по слотам)
 """
 
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -19,10 +19,10 @@ def get_month_calendar(selected_month: Optional[int] = None) -> InlineKeyboardMa
     📅 ПОЛНОЦЕННЫЙ календарь для ПОЛЬЗОВАТЕЛЕЙ
 
     Логика цветовой индикации:
-    ✅ 🔴 ПРОШЕДШИЕ ДНИ (< today)
+    ✅ ❗️ ПРОШЕДШИЕ ДНИ (< today)
     ✅ 📅 СЕГОДНЯ (== today)
-    ✅ 🟢 БУДУЩИЕ С СЛОТАМИ (>0 слотов)
-    ✅ 🔴 БУДУЩИЕ БЕЗ СЛОТОВ (0 слотов)
+    ✅   БУДУЩИЕ С СЛОТАМИ (>0 слотов)
+    ✅ ❗️ БУДУЩИЕ БЕЗ СЛОТОВ (0 слотов)
     """
     today = date.today()
 
@@ -76,7 +76,7 @@ def get_month_calendar(selected_month: Optional[int] = None) -> InlineKeyboardMa
         status_emoji, callback_data = get_user_day_status(day_date)
 
         # ✅ Кнопка дня (только если доступна)
-        if status_emoji != "🔴" or day_date == today:  # Прошедшие недоступны
+        if status_emoji != "❗️" or day_date == today:  # Прошедшие недоступны
             btn = InlineKeyboardButton(
                 f"{status_emoji} {day_num}",
                 callback_data=callback_data
@@ -117,32 +117,32 @@ def get_user_day_status(day_date: date) -> Tuple[str, str]:
     🎨 Статус дня для ПОЛЬЗОВАТЕЛЬСКОГО календаря
 
     Логика (приоритет сверху вниз):
-    1. 🔴 ПРОШЕДШИЕ ДНИ (< today)
+    1. ❗️ ПРОШЕДШИЕ ДНИ (< today)
     2. 📅 СЕГОДНЯ (== today)
     3. 🟢 БУДУЩИЕ С СЛОТАМИ (>0)
-    4. 🔴 БУДУЩИЕ БЕЗ СЛОТОВ (0)
+    4. ❗️ БУДУЩИЕ БЕЗ СЛОТОВ (0)
     """
     today = date.today()
     max_date = today + timedelta(days=MAX_BOOKING_DAYS)
 
-    # 1. 🔴 ПРОШЕДШИЕ ДНИ
+    # 1. ❗️ ПРОШЕДШИЕ ДНИ
     if day_date < today:
-        return "🔴", 'past_day'
+        return "❗️", 'past_day'
 
     # 2. 📅 СЕГОДНЯ
     if day_date == today:
         return "📅", f"date_{day_date.strftime('%Y-%m-%d')}"
 
-    # 3. 🔴 СЛИШКОМ ДАЛЕКО (> MAX_BOOKING_DAYS)
+    # 3. ❗️ СЛИШКОМ ДАЛЕКО (> MAX_BOOKING_DAYS)
     if day_date > max_date:
-        return "🔴", 'too_far_day'
+        return "❗️", 'too_far_day'
 
     # 4. БУДУЩИЕ ДНИ по слотам
     slots = get_available_slots(day_date)
     if len(slots) > 0:
-        return "🟢", f"date_{day_date.strftime('%Y-%m-%d')}"
+        return "", f"date_{day_date.strftime('%Y-%m-%d')}"
     else:
-        return "🔴", 'no_slots_day'
+        return "❗️", 'no_slots_day'
 
 
 def get_time_menu(date_str: str, available_slots: List[str]) -> InlineKeyboardMarkup:
